@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mindful browse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <span class="brand-icon">♡</span>
+      <span class="brand-name">mindful browse</span>
+    </div>
+    <label class="toggle" title="Enable / Disable">
+      <input type="checkbox" id="enabled-toggle" />
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <!-- Cooldown Duration -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-label">cooldown duration</span>
+      <span class="section-value" id="duration-display">30s</span>
+    </div>
+    <input
+      type="range"
+      id="duration-slider"
+      min="5"
+      max="120"
+      step="5"
+      value="30"
+    />
+    <div class="range-labels">
+      <span>5s</span>
+      <span>2 min</span>
+    </div>
+  </section>
+
+  <!-- Blocked Sites -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-label">blocked sites</span>
+    </div>
+    <ul id="sites-list"></ul>
+    <div class="add-row">
+      <input
+        type="text"
+        id="add-input"
+        placeholder="example.com"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button id="add-btn">add</button>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

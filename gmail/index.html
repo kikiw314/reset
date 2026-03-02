@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>newsletters ✦</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f5d5e0'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-size='20' fill='%23d4849a'%3E✦%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:        #d4849a;
+  --accent-hover:  #bf6f88;
+  --bg:            #f9f9f9;
+  --bg-card:       #fff;
+  --text-dark:     #3d1a28;
+  --text-plum:     #5c2d44;
+  --text-muted:    #c084a0;
+  --text-gray:     #999;
+  --text-light:    #bbb;
+  --border:        #e5e5e5;
+  --border-light:  #f0f0f0;
+  --border-blush:  #edccd6;
+  --ring-bg:       #f5d5e0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-plum);
+  min-height: 100vh;
+}
+
+/* ── Screens ─────────────────────────────────────────── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── Setup screen ────────────────────────────────────── */
+#screen-setup {
+  min-height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+#screen-setup.active { display: flex; }
+
+.setup-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 20px;
+  padding: 36px 32px 32px;
+  max-width: 480px;
+  width: 100%;
+}
+.setup-logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.setup-logo .glyph { color: var(--accent); }
+.setup-intro {
+  font-size: 0.875rem;
+  color: var(--text-plum);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.setup-steps {
+  list-style: none;
+  margin-bottom: 24px;
+}
+.setup-steps li {
+  font-size: 0.82rem;
+  color: var(--text-gray);
+  line-height: 1.6;
+  padding: 6px 0 6px 20px;
+  position: relative;
+  border-bottom: 1px solid var(--border-light);
+}
+.setup-steps li:last-child { border-bottom: none; }
+.setup-steps li::before {
+  content: attr(data-n);
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+.setup-steps code {
+  background: var(--ring-bg);
+  color: var(--text-plum);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.78rem;
+}
+.setup-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Shared inputs / buttons ─────────────────────────── */
+.text-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-plum);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.text-input::placeholder { color: var(--text-light); }
+.text-input:focus { border-color: var(--accent); }
+.text-input.flash-error {
+  border-color: var(--accent) !important;
+  animation: flashBorder 0.4s ease;
+}
+@keyframes flashBorder {
+  0%   { border-color: var(--accent); }
+  50%  { border-color: #ff8fa0; }
+  100% { border-color: var(--accent); }
+}
+.btn-primary {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+
+/* ── App screen ──────────────────────────────────────── */
+#screen-app {
+  min-height: 100vh;
+  padding-bottom: 60px;
+  display: none;
+}
+#screen-app.active { display: block; }
+
+/* ── Header ─────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 0 20px;
+}
+.app-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  flex: 1;
+}
+.app-title .glyph { color: var(--accent); }
+.header-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 1rem;
+  padding: 6px;
+  border-radius: 8px;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-icon:hover { color: var(--accent); background: var(--ring-bg); }
+.btn-icon.hidden { display: none; }
+
+#btn-signin {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-blush);
+  background: var(--bg-card);
+  color: var(--text-plum);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+#btn-signin:hover { border-color: var(--accent); color: var(--accent); }
+#btn-signin.hidden { display: none; }
+
+/* User chip + sign-out popout */
+.user-chip-wrap {
+  position: relative;
+}
+.user-chip {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  background: var(--ring-bg);
+  border: 1.5px solid var(--border-blush);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.user-chip:hover { border-color: var(--accent); }
+.user-chip.visible { display: flex; }
+.user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.user-name {
+  font-size: 0.78rem;
+  color: var(--text-plum);
+  font-weight: 500;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signout-popout {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 14px;
+  padding: 14px 16px 12px;
+  box-shadow: 0 8px 28px rgba(61, 26, 40, 0.13);
+  z-index: 300;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  min-width: 170px;
+  white-space: nowrap;
+}
+.signout-popout.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.signout-popout-email {
+  font-size: 0.75rem;
+  color: var(--text-gray);
+  margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.signout-popout-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-plum);
+  margin-bottom: 10px;
+}
+.signout-popout-actions {
+  display: flex;
+  gap: 6px;
+}
+.btn-pop-cancel {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: none;
+  color: var(--text-gray);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.btn-pop-cancel:hover { border-color: var(--border-blush); color: var(--text-plum); }
+.btn-pop-signout {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.btn-pop-signout:hover { background: var(--accent-hover); }
+
+/* ── Layout ──────────────────────────────────────────── */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ── States ──────────────────────────────────────────── */
+#auth-prompt, #loading-state, #error-state, #empty-state {
+  text-align: center;
+  padding: 60px 0 40px;
+}
+#auth-prompt.hidden, #loading-state.hidden,
+#error-state.hidden, #empty-state.hidden { display: none; }
+.state-glyph {
+  font-size: 1.6rem;
+  display: block;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+.state-text {
+  font-size: 0.855rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.btn-retry {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-blush);
+  background: none;
+  color: var(--text-plum);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-retry:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Feed ────────────────────────────────────────────── */
+#feed { display: none; }
+#feed.visible { display: block; }
+
+.day-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 24px 0 10px;
+}
+.day-label:first-child { margin-top: 0; }
+
+.feed-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+/* ── Newsletter card ─────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.newsletter-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 14px;
+  padding: 16px 18px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  animation: slideIn 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.newsletter-card:hover {
+  border-color: var(--border-blush);
+  box-shadow: 0 2px 12px rgba(212, 132, 154, 0.1);
+}
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.source-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--ring-bg);
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card-date {
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+.card-subject {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-preview {
+  font-size: 0.8rem;
+  color: var(--text-gray);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Read state */
+.newsletter-card.is-read {
+  opacity: 0.45;
+  background: var(--bg);
+}
+.newsletter-card.is-read .card-subject {
+  text-decoration: line-through;
+  color: var(--text-light);
+}
+.newsletter-card.is-read:hover {
+  opacity: 0.65;
+}
+
+/* Per-card read toggle button */
+.btn-card-read {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  padding: 0;
+}
+.btn-card-read::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 4px;
+  border-left: 1.5px solid var(--text-light);
+  border-bottom: 1.5px solid var(--text-light);
+  transform: rotate(-45deg) translate(0.5px, -1px);
+  transition: border-color 0.15s;
+}
+.btn-card-read:hover {
+  border-color: var(--accent);
+  background: var(--ring-bg);
+}
+.btn-card-read:hover::after {
+  border-color: var(--accent);
+}
+.newsletter-card.is-read .btn-card-read {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.newsletter-card.is-read .btn-card-read::after {
+  border-color: #fff;
+}
+
+/* ── Backdrop ────────────────────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(61, 26, 40, 0.22);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.backdrop.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ── Email modal — full screen ───────────────────────── */
+#modal-email {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+#modal-email.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.modal-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+  background: var(--bg-card);
+}
+.modal-source-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--ring-bg);
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.modal-date {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  flex: 1;
+}
+.btn-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+.btn-close:hover { color: var(--accent); background: var(--ring-bg); }
+.viewer-subject {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.45;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+  background: var(--bg-card);
+}
+.viewer-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.viewer-body iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.viewer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+.viewer-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-mark-read {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-blush);
+  background: none;
+  color: var(--text-plum);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-mark-read:hover { border-color: var(--accent); color: var(--accent); }
+.btn-next-article {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-next-article:hover { background: var(--accent-hover); }
+.btn-next-article:disabled {
+  background: var(--border);
+  color: var(--text-light);
+  cursor: default;
+}
+.btn-prev-article {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-blush);
+  background: none;
+  color: var(--text-plum);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-prev-article:hover { border-color: var(--accent); color: var(--accent); }
+.btn-prev-article:disabled {
+  border-color: var(--border-light);
+  color: var(--text-light);
+  cursor: default;
+}
+
+/* ── Settings modal — centered ───────────────────────── */
+#modal-settings {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  width: 460px;
+  max-width: calc(100vw - 32px);
+  max-height: 82vh;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(61, 26, 40, 0.15);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+}
+#modal-settings.open {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.settings-header {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+.settings-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  flex: 1;
+}
+.settings-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.settings-section { margin-bottom: 26px; }
+.settings-section:last-child { margin-bottom: 0; }
+.settings-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.pills-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.day-pill {
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-blush);
+  background: var(--bg-card);
+  color: var(--text-plum);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.day-pill:hover { border-color: var(--accent); color: var(--accent); }
+.day-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.settings-input-row {
+  display: flex;
+  gap: 8px;
+}
+.settings-input-row .text-input { font-size: 0.8rem; }
+.btn-save {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.btn-save:hover { background: var(--accent-hover); }
+
+.sender-add-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.sender-add-row .text-input { font-size: 0.8rem; }
+.btn-add-sender {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.btn-add-sender:hover { background: var(--accent-hover); }
+
+.senders-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.sender-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--ring-bg);
+  border: 1.5px solid var(--border-blush);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--text-plum);
+}
+.sender-tag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.12s;
+}
+.sender-tag-remove:hover { color: var(--accent-hover); }
+
+.settings-signout {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-gray);
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.15s;
+}
+.settings-signout:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ── Setup screen ──────────────────────────────────────────────── -->
+<div id="screen-setup" class="screen">
+  <div class="setup-card">
+    <div class="setup-logo">newsletters <span class="glyph">✦</span></div>
+    <p class="setup-intro">reads your gmail inbox and surfaces daily newsletters as minimal cards. needs a google oauth client id to get started.</p>
+    <ol class="setup-steps">
+      <li data-n="1">go to <strong>console.cloud.google.com</strong> → create a new project</li>
+      <li data-n="2">enable the <strong>gmail api</strong> (APIs &amp; Services → Library)</li>
+      <li data-n="3">go to <strong>OAuth consent screen</strong> → External → add your google account as test user</li>
+      <li data-n="4">create <strong>OAuth 2.0 Credentials</strong> → Web Application</li>
+      <li data-n="5">add <code>http://localhost:8080</code> to <strong>Authorized JavaScript Origins</strong></li>
+      <li data-n="6">copy the <strong>Client ID</strong> and paste below</li>
+    </ol>
+    <div class="setup-input-row">
+      <input
+        id="setup-client-id"
+        class="text-input"
+        type="text"
+        placeholder="paste your oauth client id here"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <button class="btn-primary" id="btn-setup-save">save &amp; continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── App screen ────────────────────────────────────────────────── -->
+<div id="screen-app" class="screen">
+  <div class="container">
+    <header>
+      <span class="app-title">newsletters <span class="glyph">✦</span></span>
+      <span class="header-date" id="header-date"></span>
+      <button class="btn-icon hidden" id="btn-refresh" title="refresh" aria-label="refresh">↻</button>
+      <button class="btn-icon" id="btn-settings" title="settings" aria-label="settings">⚙</button>
+      <button id="btn-signin">sign in with google</button>
+      <div class="user-chip-wrap">
+        <div class="user-chip" id="user-chip">
+          <div class="user-avatar" id="user-avatar"></div>
+          <span class="user-name" id="user-name"></span>
+        </div>
+        <div class="signout-popout" id="signout-popout">
+          <div class="signout-popout-email" id="signout-email"></div>
+          <div class="signout-popout-label">sign out?</div>
+          <div class="signout-popout-actions">
+            <button class="btn-pop-cancel" id="btn-cancel-signout">cancel</button>
+            <button class="btn-pop-signout" id="btn-confirm-signout">sign out</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div id="auth-prompt">
+        <span class="state-glyph">✦</span>
+        <p class="state-text">sign in with google to fetch your newsletters</p>
+      </div>
+      <div id="loading-state" class="hidden">
+        <span class="state-glyph">✦</span>
+        <p class="state-text">fetching newsletters…</p>
+      </div>
+      <div id="error-state" class="hidden">
+        <span class="state-glyph">◦</span>
+        <p class="state-text" id="error-message">something went wrong</p>
+        <button class="btn-retry" id="btn-retry">try again</button>
+      </div>
+      <div id="empty-state" class="hidden">
+        <span class="state-glyph">◌</span>
+        <p class="state-text">no newsletters found in the last <span id="empty-days">2</span> days — try adding more senders in settings</p>
+      </div>
+      <div id="feed"></div>
+    </main>
+  </div>
+</div>
+
+<!-- ── Backdrop ───────────────────────────────────────────────────── -->
+<div class="backdrop" id="backdrop"></div>
+
+<!-- ── Email modal — full screen ─────────────────────────────────── -->
+<div id="modal-email">
+  <div class="modal-topbar">
+    <span class="modal-source-badge" id="viewer-source"></span>
+    <span class="modal-date" id="viewer-date"></span>
+    <button class="btn-close" id="btn-close-email" title="close">×</button>
+  </div>
+  <h2 class="viewer-subject" id="viewer-subject"></h2>
+  <div class="viewer-body">
+    <iframe
+      id="viewer-iframe"
+      sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+      title="email content"
+    ></iframe>
+  </div>
+  <div class="viewer-footer">
+    <button class="btn-prev-article" id="btn-prev-article">← prev article</button>
+    <div class="viewer-footer-right">
+      <button class="btn-mark-read" id="btn-mark-read">mark as read</button>
+      <button class="btn-next-article" id="btn-next-article">next article →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Settings modal — centered ─────────────────────────────────── -->
+<div id="modal-settings">
+  <div class="settings-header">
+    <span class="settings-title">settings</span>
+    <button class="btn-close" id="btn-close-settings" title="close">×</button>
+  </div>
+  <div class="settings-body">
+
+    <div class="settings-section">
+      <span class="settings-label">look back</span>
+      <div class="pills-row" id="days-pills">
+        <button class="day-pill" data-days="1">1 day</button>
+        <button class="day-pill" data-days="2">2 days</button>
+        <button class="day-pill" data-days="3">3 days</button>
+        <button class="day-pill" data-days="5">5 days</button>
+        <button class="day-pill" data-days="7">7 days</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <span class="settings-label">oauth client id</span>
+      <div class="settings-input-row">
+        <input
+          id="settings-client-id"
+          class="text-input"
+          type="text"
+          placeholder="paste client id"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="btn-save" id="btn-save-client-id">save</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <span class="settings-label">newsletter senders</span>
+      <div class="sender-add-row">
+        <input
+          id="sender-input"
+          class="text-input"
+          type="text"
+          placeholder="e.g. morningbrew.com"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="btn-add-sender" id="btn-add-sender" title="add sender">+</button>
+      </div>
+      <div class="senders-list" id="senders-list"></div>
+    </div>
+
+    <div class="settings-section">
+      <span class="settings-label">account</span>
+      <button class="settings-signout" id="btn-signout-settings">sign out</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async onload="onGISLoad()"></script>
+
+<script>
+// ── Constants ────────────────────────────────────────────────────────────
+const GMAIL_API      = 'https://gmail.googleapis.com/gmail/v1/users/me';
+const SCOPE          = 'https://www.googleapis.com/auth/gmail.readonly';
+const LS_CLIENT_ID   = 'gmail_client_id';
+const LS_SENDERS     = 'gmail_newsletter_senders';
+const LS_DAYS        = 'gmail_lookback_days';
+const LS_TOKEN       = 'gmail_access_token';
+const LS_TOKEN_EXP   = 'gmail_token_expiry';
+const LS_SIGNED_IN   = 'gmail_signed_in';
+const LS_READ        = 'gmail_read_ids';
+
+const DEFAULT_SENDERS = [
+  'morningbrew.com', 'thebrowser.com', 'densediscovery.com',
+  'thenewsette.com', 'nextnewsletter.com'
+];
+
+// ── State ────────────────────────────────────────────────────────────────
+let accessToken      = null;
+let tokenClient      = null;
+let clientId         = '';
+let senders          = [];
+let lookbackDays     = 2;
+let emails           = [];
+let currentEmailId   = null;
+let gisLoaded        = false;
+let silentAuthAttempt = false;
+let userEmail        = '';
+let readIds          = new Set();
+let displayOrder     = [];
+
+// ── Utilities ────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function formatDate(ms) {
+  const d = new Date(ms);
+  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}`;
+}
+
+function dayGroupLabel(ms) {
+  const d     = new Date(ms);
+  const today = new Date();
+  const key   = dt => `${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`;
+  const yest  = new Date(today); yest.setDate(yest.getDate() - 1);
+  if (key(d) === key(today)) return 'today';
+  if (key(d) === key(yest))  return 'yesterday';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[d.getMonth()]} ${d.getDate()}`;
+}
+
+function stripHtml(html) {
+  const cleaned = html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ');
+  const div = document.createElement('div');
+  div.innerHTML = cleaned;
+  return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+}
+
+function base64urlDecode(str) {
+  const s      = str.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = s + '==='.slice((s.length + 3) % 4);
+  const binary = atob(padded);
+  const bytes  = Uint8Array.from(binary, c => c.charCodeAt(0));
+  return new TextDecoder('utf-8').decode(bytes);
+}
+
+function buildGmailQuery(sndrs, days) {
+  if (!sndrs.length) return `newer_than:${days}d`;
+  return `from:(${sndrs.map(s => `@${s}`).join(' OR ')}) newer_than:${days}d`;
+}
+
+function extractSenderName(fromHeader) {
+  if (!fromHeader) return 'unknown';
+  const m = fromHeader.match(/^"?([^"<]+?)"?\s*</);
+  if (m) return m[1].trim();
+  const em = fromHeader.match(/<([^>]+)>/);
+  if (em) return em[1].split('@')[0];
+  return fromHeader.split('@')[0].trim();
+}
+
+function todayDisplay() {
+  const d = new Date();
+  const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}`;
+}
+
+// ── Settings persistence ──────────────────────────────────────────────────
+function loadSettings() {
+  clientId     = localStorage.getItem(LS_CLIENT_ID) || '';
+  lookbackDays = parseInt(localStorage.getItem(LS_DAYS) || '2', 10);
+  try {
+    senders = JSON.parse(localStorage.getItem(LS_SENDERS) || 'null') || DEFAULT_SENDERS.slice();
+  } catch { senders = DEFAULT_SENDERS.slice(); }
+}
+function saveSenders() { localStorage.setItem(LS_SENDERS, JSON.stringify(senders)); }
+function saveDays()    { localStorage.setItem(LS_DAYS, String(lookbackDays)); }
+function loadReadIds() {
+  try { readIds = new Set(JSON.parse(localStorage.getItem(LS_READ) || '[]')); }
+  catch { readIds = new Set(); }
+}
+function saveReadIds() { localStorage.setItem(LS_READ, JSON.stringify([...readIds])); }
+function toggleRead(id) {
+  readIds.has(id) ? readIds.delete(id) : readIds.add(id);
+  saveReadIds();
+}
+function getDisplayOrder() {
+  return [...emails].sort((a, b) => {
+    const aRead = readIds.has(a.id);
+    const bRead = readIds.has(b.id);
+    if (aRead !== bRead) return aRead ? 1 : -1; // unread first
+    return b.dateMs - a.dateMs;
+  });
+}
+
+// ── Token persistence ─────────────────────────────────────────────────────
+function persistToken(token, expiresIn) {
+  localStorage.setItem(LS_TOKEN,     token);
+  localStorage.setItem(LS_TOKEN_EXP, String(Date.now() + (expiresIn - 120) * 1000));
+  localStorage.setItem(LS_SIGNED_IN, '1');
+}
+function clearPersistedToken() {
+  localStorage.removeItem(LS_TOKEN);
+  localStorage.removeItem(LS_TOKEN_EXP);
+  localStorage.removeItem(LS_SIGNED_IN);
+}
+function loadPersistedToken() {
+  const token  = localStorage.getItem(LS_TOKEN);
+  const expiry = parseInt(localStorage.getItem(LS_TOKEN_EXP) || '0', 10);
+  return (token && Date.now() < expiry) ? token : null;
+}
+
+// ── Gmail API ────────────────────────────────────────────────────────────
+async function gmailFetch(path, params = {}) {
+  const url = new URL(`${GMAIL_API}${path}`);
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  });
+  if (res.status === 401) { handleTokenExpiry(); throw new Error('token_expired'); }
+  if (!res.ok) throw new Error(`gmail_api_${res.status}`);
+  return res.json();
+}
+
+async function listMessageIds(query) {
+  const data = await gmailFetch('/messages', { q: query, maxResults: '50' });
+  return (data.messages || []).map(m => m.id);
+}
+
+function extractBody(payload) {
+  if (!payload) return { html: '', text: '' };
+  if (payload.body && payload.body.data && payload.body.size > 0) {
+    const decoded   = base64urlDecode(payload.body.data);
+    const mimeType  = (payload.mimeType || '').toLowerCase();
+    if (mimeType === 'text/html')  return { html: decoded, text: '' };
+    if (mimeType === 'text/plain') return { html: '', text: decoded };
+  }
+  if (payload.parts && payload.parts.length) {
+    let html = '', text = '';
+    for (const part of payload.parts) {
+      const mt = (part.mimeType || '').toLowerCase();
+      if (mt === 'text/html' && !html && part.body?.data)
+        html = base64urlDecode(part.body.data);
+      else if (mt === 'text/plain' && !text && part.body?.data)
+        text = base64urlDecode(part.body.data);
+      else if (mt.startsWith('multipart/')) {
+        const sub = extractBody(part);
+        if (!html && sub.html) html = sub.html;
+        if (!text && sub.text) text = sub.text;
+      }
+    }
+    return { html, text };
+  }
+  return { html: '', text: '' };
+}
+
+function parseMessage(raw) {
+  const headers = {};
+  (raw.payload.headers || []).forEach(h => { headers[h.name.toLowerCase()] = h.value; });
+  const dateMs     = parseInt(raw.internalDate, 10);
+  const senderName = extractSenderName(headers['from'] || '');
+  const subject    = headers['subject'] || '(no subject)';
+  const { html: htmlBody, text: textBody } = extractBody(raw.payload);
+  const rawPreview = htmlBody ? stripHtml(htmlBody) : textBody;
+  return { id: raw.id, senderName, subject, dateMs, previewText: rawPreview.slice(0, 200), htmlBody, textBody };
+}
+
+async function fetchAllEmails() {
+  showLoading();
+  try {
+    const ids = await listMessageIds(buildGmailQuery(senders, lookbackDays));
+    if (!ids.length) { hideLoading(); showEmpty(); return; }
+    const allRaw = [];
+    for (let i = 0; i < ids.length; i += 10) {
+      const chunk = ids.slice(i, i + 10);
+      const results = await Promise.all(chunk.map(id =>
+        gmailFetch(`/messages/${id}`, { format: 'full' })
+      ));
+      allRaw.push(...results);
+    }
+    emails = allRaw.map(parseMessage).sort((a, b) => b.dateMs - a.dateMs);
+    hideLoading();
+    renderFeed();
+  } catch (err) {
+    if (err.message === 'token_expired') return;
+    hideLoading();
+    showError(err.message || 'failed to fetch emails');
+  }
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────
+function initGIS() {
+  if (!clientId || !window.google?.accounts?.oauth2) return;
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: SCOPE,
+    callback: onTokenReceived,
+  });
+}
+
+function onTokenReceived(response) {
+  const wasSilent = silentAuthAttempt;
+  silentAuthAttempt = false;
+  if (response.error) {
+    if (wasSilent) return; // silent fail — just show sign-in button
+    showError('sign-in failed: ' + response.error);
+    return;
+  }
+  accessToken = response.access_token;
+  persistToken(accessToken, response.expires_in || 3600);
+  fetchUserInfo();
+  updateAuthUI(true);
+  fetchAllEmails();
+}
+
+async function fetchUserInfo() {
+  try {
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if (!res.ok) return;
+    const info = await res.json();
+    userEmail = info.email || '';
+    const name = info.name || info.email || '';
+    document.getElementById('user-name').textContent = name.split(' ')[0] || name;
+    document.getElementById('signout-email').textContent = userEmail;
+    const avatar = document.getElementById('user-avatar');
+    if (info.picture) {
+      avatar.innerHTML = `<img src="${escHtml(info.picture)}" alt="">`;
+    } else {
+      avatar.textContent = (name[0] || '?').toUpperCase();
+    }
+  } catch { /* non-critical */ }
+}
+
+function requestToken() {
+  if (!tokenClient) {
+    if (!clientId) { showSetupScreen(); return; }
+    initGIS();
+    if (!tokenClient) { showError('google identity services not loaded yet — try refreshing'); return; }
+  }
+  tokenClient.requestAccessToken({ prompt: 'select_account' });
+}
+
+function handleTokenExpiry() {
+  accessToken = null;
+  clearPersistedToken();
+  if (tokenClient && !silentAuthAttempt) {
+    silentAuthAttempt = true;
+    tokenClient.requestAccessToken({ prompt: '' });
+  } else {
+    updateAuthUI(false);
+    showError('session expired — please sign in again');
+  }
+}
+
+function signOut() {
+  if (accessToken) {
+    try { google.accounts.oauth2.revoke(accessToken); } catch {}
+  }
+  accessToken = null;
+  userEmail   = '';
+  emails      = [];
+  clearPersistedToken();
+  updateAuthUI(false);
+  hideAllStates();
+  document.getElementById('auth-prompt').classList.remove('hidden');
+  document.getElementById('feed').classList.remove('visible');
+  document.getElementById('feed').innerHTML = '';
+  closeAllModals();
+}
+
+function updateAuthUI(isAuthed) {
+  document.getElementById('btn-signin').classList.toggle('hidden', isAuthed);
+  document.getElementById('user-chip').classList.toggle('visible', isAuthed);
+  document.getElementById('btn-refresh').classList.toggle('hidden', !isAuthed);
+}
+
+// ── Rendering ─────────────────────────────────────────────────────────────
+function hideAllStates() {
+  ['auth-prompt','loading-state','error-state','empty-state'].forEach(id =>
+    document.getElementById(id).classList.add('hidden')
+  );
+}
+function showLoading() {
+  hideAllStates();
+  document.getElementById('loading-state').classList.remove('hidden');
+  document.getElementById('feed').classList.remove('visible');
+}
+function hideLoading() { document.getElementById('loading-state').classList.add('hidden'); }
+function showError(msg) {
+  hideAllStates();
+  document.getElementById('error-message').textContent = msg;
+  document.getElementById('error-state').classList.remove('hidden');
+}
+function showEmpty() {
+  hideAllStates();
+  document.getElementById('empty-days').textContent = lookbackDays;
+  document.getElementById('empty-state').classList.remove('hidden');
+}
+
+function renderFeed() {
+  if (!emails.length) { showEmpty(); return; }
+  hideAllStates();
+  displayOrder = getDisplayOrder();
+  const feed = document.getElementById('feed');
+  feed.innerHTML = '';
+  feed.classList.add('visible');
+  const groups = new Map();
+  displayOrder.forEach(email => {
+    const label = dayGroupLabel(email.dateMs);
+    if (!groups.has(label)) groups.set(label, []);
+    groups.get(label).push(email);
+  });
+  groups.forEach((dayEmails, label) => {
+    const dayDiv = document.createElement('div');
+    dayDiv.className = 'day-label';
+    dayDiv.textContent = label;
+    feed.appendChild(dayDiv);
+    const grid = document.createElement('div');
+    grid.className = 'feed-grid';
+    dayEmails.forEach(email => grid.appendChild(renderCard(email)));
+    feed.appendChild(grid);
+  });
+}
+
+function renderCard(email) {
+  const isRead = readIds.has(email.id);
+  const card = document.createElement('div');
+  card.className = 'newsletter-card' + (isRead ? ' is-read' : '');
+  card.dataset.id = email.id;
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="source-badge">${escHtml(email.senderName)}</span>
+      <div class="card-right">
+        <span class="card-date">${escHtml(formatDate(email.dateMs))}</span>
+        <button class="btn-card-read" title="${isRead ? 'mark unread' : 'mark as read'}"></button>
+      </div>
+    </div>
+    <div class="card-subject">${escHtml(email.subject)}</div>
+    ${email.previewText ? `<div class="card-preview">${escHtml(email.previewText)}</div>` : ''}
+  `;
+  const readBtn = card.querySelector('.btn-card-read');
+  readBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleRead(email.id);
+    renderFeed();
+  });
+  card.addEventListener('click', () => openEmailViewer(email));
+  return card;
+}
+
+// ── Email viewer ──────────────────────────────────────────────────────────
+function getCurrentDisplayIndex() {
+  return displayOrder.findIndex(e => e.id === currentEmailId);
+}
+// kept for mark-read splice (emails array)
+function getCurrentEmailIndex() {
+  return emails.findIndex(e => e.id === currentEmailId);
+}
+
+function openEmailViewer(email) {
+  currentEmailId = email.id;
+  document.getElementById('viewer-source').textContent  = email.senderName;
+  document.getElementById('viewer-date').textContent    = formatDate(email.dateMs);
+  document.getElementById('viewer-subject').textContent = email.subject;
+  const body  = email.htmlBody || `<pre style="white-space:pre-wrap;font-family:sans-serif">${escHtml(email.textBody || '(no content)')}</pre>`;
+  document.getElementById('viewer-iframe').srcdoc = buildEmailDocument(body);
+  updateNavButtons();
+  updateViewerReadBtn();
+  openModal('email');
+}
+
+function updateViewerReadBtn() {
+  const btn = document.getElementById('btn-mark-read');
+  btn.textContent = readIds.has(currentEmailId) ? 'mark as unread' : 'mark as read';
+}
+
+function buildEmailDocument(bodyHtml) {
+  return `<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base target="_blank">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #f7f7f7; }
+  #email-outer {
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px 40px;
+    min-height: 100vh;
+  }
+  #email-inner {
+    width: 100%;
+    max-width: 680px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+  }
+  img { max-width: 100% !important; height: auto !important; }
+  a { color: #d4849a; }
+  /* Force email tables to center */
+  table { margin-left: auto !important; margin-right: auto !important; max-width: 100% !important; }
+  td { max-width: 100%; }
+</style>
+</head><body>
+<div id="email-outer"><div id="email-inner">${bodyHtml}</div></div>
+</body></html>`;
+}
+
+function updateNavButtons() {
+  const idx = getCurrentDisplayIndex();
+  const nextBtn = document.getElementById('btn-next-article');
+  const prevBtn = document.getElementById('btn-prev-article');
+  const hasNext = idx !== -1 && idx < displayOrder.length - 1;
+  const hasPrev = idx > 0;
+  nextBtn.disabled = !hasNext;
+  nextBtn.textContent = hasNext ? 'next article →' : 'no more articles';
+  prevBtn.disabled = !hasPrev;
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('settings-client-id').value = clientId;
+  renderDaysPills();
+  renderSendersList();
+  openModal('settings');
+}
+
+function renderDaysPills() {
+  document.querySelectorAll('.day-pill').forEach(pill =>
+    pill.classList.toggle('active', parseInt(pill.dataset.days, 10) === lookbackDays)
+  );
+}
+
+function renderSendersList() {
+  const list = document.getElementById('senders-list');
+  list.innerHTML = '';
+  senders.forEach(sender => {
+    const tag = document.createElement('span');
+    tag.className = 'sender-tag';
+    tag.innerHTML = `${escHtml(sender)}<button class="sender-tag-remove" data-sender="${escHtml(sender)}" title="remove">×</button>`;
+    list.appendChild(tag);
+  });
+  list.querySelectorAll('.sender-tag-remove').forEach(btn => {
+    btn.addEventListener('click', e => {
+      senders = senders.filter(x => x !== e.currentTarget.dataset.sender);
+      saveSenders();
+      renderSendersList();
+    });
+  });
+}
+
+function addSender() {
+  const input = document.getElementById('sender-input');
+  let val = input.value.trim().toLowerCase()
+    .replace(/^https?:\/\//i, '').replace(/^@/, '').replace(/\/.*$/, '').trim();
+  if (!val) return;
+  if (senders.includes(val)) {
+    input.classList.add('flash-error');
+    setTimeout(() => input.classList.remove('flash-error'), 500);
+    return;
+  }
+  senders.push(val);
+  saveSenders();
+  input.value = '';
+  renderSendersList();
+}
+
+// ── Modal management ──────────────────────────────────────────────────────
+function openModal(name) {
+  closeAllModals(false);
+  if (name === 'settings') {
+    document.getElementById('backdrop').classList.add('open');
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.getElementById(`modal-${name}`).classList.add('open');
+  }));
+}
+
+function closeAllModals(clearState = true) {
+  document.getElementById('backdrop').classList.remove('open');
+  document.getElementById('modal-email').classList.remove('open');
+  document.getElementById('modal-settings').classList.remove('open');
+  if (clearState) currentEmailId = null;
+}
+
+// ── Screen management ─────────────────────────────────────────────────────
+function showSetupScreen() {
+  document.getElementById('screen-setup').classList.add('active');
+  document.getElementById('screen-app').classList.remove('active');
+}
+function showAppScreen() {
+  document.getElementById('screen-setup').classList.remove('active');
+  document.getElementById('screen-app').classList.add('active');
+  document.getElementById('header-date').textContent = todayDisplay();
+}
+
+function handleSetupSave() {
+  const input = document.getElementById('setup-client-id');
+  const val   = input.value.trim();
+  if (!val) {
+    input.classList.add('flash-error');
+    setTimeout(() => input.classList.remove('flash-error'), 500);
+    return;
+  }
+  clientId = val;
+  localStorage.setItem(LS_CLIENT_ID, clientId);
+  showAppScreen();
+  if (gisLoaded) initGIS();
+}
+
+// ── GIS load callback ─────────────────────────────────────────────────────
+function onGISLoad() {
+  gisLoaded = true;
+  if (!clientId) return;
+  initGIS();
+  // Try silent re-auth if user was previously signed in
+  if (!accessToken && localStorage.getItem(LS_SIGNED_IN) && tokenClient) {
+    silentAuthAttempt = true;
+    tokenClient.requestAccessToken({ prompt: '' });
+  }
+}
+
+// ── Event listeners ───────────────────────────────────────────────────────
+
+// Setup
+document.getElementById('btn-setup-save').addEventListener('click', handleSetupSave);
+document.getElementById('setup-client-id').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSetupSave();
+});
+
+// Sign in
+document.getElementById('btn-signin').addEventListener('click', requestToken);
+
+// User chip → show sign-out popout
+document.getElementById('user-chip').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('signout-popout').classList.toggle('open');
+});
+document.getElementById('btn-cancel-signout').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('signout-popout').classList.remove('open');
+});
+document.getElementById('btn-confirm-signout').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('signout-popout').classList.remove('open');
+  signOut();
+});
+
+// Refresh
+document.getElementById('btn-refresh').addEventListener('click', () => {
+  if (accessToken) fetchAllEmails();
+});
+
+// Settings
+document.getElementById('btn-settings').addEventListener('click', openSettings);
+document.getElementById('btn-close-settings').addEventListener('click', () => closeAllModals());
+document.getElementById('backdrop').addEventListener('click', () => closeAllModals());
+
+document.getElementById('btn-save-client-id').addEventListener('click', () => {
+  const val = document.getElementById('settings-client-id').value.trim();
+  if (!val) return;
+  clientId = val;
+  localStorage.setItem(LS_CLIENT_ID, clientId);
+  tokenClient = null;
+  accessToken = null;
+  clearPersistedToken();
+  updateAuthUI(false);
+  initGIS();
+  closeAllModals();
+});
+
+document.getElementById('days-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.day-pill');
+  if (!pill) return;
+  lookbackDays = parseInt(pill.dataset.days, 10);
+  saveDays();
+  renderDaysPills();
+  if (accessToken) { closeAllModals(); fetchAllEmails(); }
+});
+
+document.getElementById('btn-add-sender').addEventListener('click', addSender);
+document.getElementById('sender-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addSender();
+});
+
+// Settings sign-out
+document.getElementById('btn-signout-settings').addEventListener('click', () => {
+  closeAllModals();
+  signOut();
+});
+
+// Email viewer
+document.getElementById('btn-close-email').addEventListener('click', () => closeAllModals());
+document.getElementById('btn-mark-read').addEventListener('click', () => {
+  if (!currentEmailId) return;
+  toggleRead(currentEmailId);
+  updateViewerReadBtn();
+  updateNavButtons();
+  renderFeed();
+});
+document.getElementById('btn-prev-article').addEventListener('click', () => {
+  const idx = getCurrentDisplayIndex();
+  if (idx > 0) openEmailViewer(displayOrder[idx - 1]);
+});
+document.getElementById('btn-next-article').addEventListener('click', () => {
+  const idx = getCurrentDisplayIndex();
+  if (idx !== -1 && idx < displayOrder.length - 1) openEmailViewer(displayOrder[idx + 1]);
+});
+
+// Retry
+document.getElementById('btn-retry').addEventListener('click', () => {
+  if (accessToken) fetchAllEmails(); else requestToken();
+});
+
+// Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('signout-popout').classList.contains('open')) {
+      document.getElementById('signout-popout').classList.remove('open');
+    } else {
+      closeAllModals();
+    }
+  }
+});
+
+// Close sign-out popout on outside click
+document.addEventListener('click', () => {
+  document.getElementById('signout-popout').classList.remove('open');
+});
+
+// ── Init ─────────────────────────────────────────────────────────────────
+function init() {
+  loadSettings();
+  loadReadIds();
+  if (!clientId) { showSetupScreen(); return; }
+  showAppScreen();
+
+  // Check for a valid stored token first
+  const stored = loadPersistedToken();
+  if (stored) {
+    accessToken = stored;
+    updateAuthUI(true);
+    fetchUserInfo();
+    fetchAllEmails();
+  } else {
+    updateAuthUI(false);
+  }
+
+  // GIS may already be loaded synchronously
+  if (window.google?.accounts?.oauth2) {
+    gisLoaded = true;
+    initGIS();
+    // If no valid stored token but user was previously signed in, try silent re-auth
+    if (!accessToken && localStorage.getItem(LS_SIGNED_IN) && tokenClient) {
+      silentAuthAttempt = true;
+      tokenClient.requestAccessToken({ prompt: '' });
+    }
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "mindful browse",
+  "version": "1.0",
+  "description": "add a cooldown pause before visiting distracting websites !",
+  "permissions": [
+    "webNavigation",
+    "storage",
+    "tabs",
+    "alarms"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "mindful browse"
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>take a break ♥</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cooldown.css" />
+</head>
+<body>
+  <div class="container">
+    <p class="eyebrow">take a break ♥</p>
+    <h1>take a moment</h1>
+    <p class="subtitle">
+      you're about to visit <strong id="site-name"></strong>
+    </p>
+
+    <div class="timer-wrap">
+      <svg class="ring" viewBox="0 0 100 100">
+        <circle class="ring-bg" cx="50" cy="50" r="45" />
+        <circle class="ring-fill" id="ring-fill" cx="50" cy="50" r="45" />
+      </svg>
+      <span class="timer-num" id="timer-num">—</span>
+    </div>
+
+    <p class="message" id="message"></p>
+
+    <div class="duration-input" id="duration-input">
+      <div class="duration-row">
+        <input type="number" id="session-minutes" value="10" min="1" max="30" />
+        <span class="duration-unit">min</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="proceed-btn" class="btn-primary" disabled>
+        proceed to site
+      </button>
+      <button id="back-btn" class="btn-ghost">go back</button>
+    </div>
+  </div>
+
+  <script src="cooldown.js"></script>
+</body>
+</html>
