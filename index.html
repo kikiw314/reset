@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>reset</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f5d5e0'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-size='20' fill='%23d4849a'%3E✦%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #d4849a;
+  --accent-hover: #bf6f88;
+  --bg: #f9f9f9;
+  --bg-card: #fff;
+  --text-dark: #3d1a28;
+  --text-plum: #5c2d44;
+  --text-muted: #c084a0;
+  --text-light: #bbb;
+  --border-light: #f0f0f0;
+  --border-blush: #edccd6;
+  --ring-bg: #f5d5e0;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-plum);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.title .glyph { color: var(--accent); }
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 48px;
+}
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+}
+.app-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.app-link:hover {
+  border-color: var(--border-blush);
+  box-shadow: 0 2px 12px rgba(212, 132, 154, 0.1);
+}
+.app-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--ring-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.app-info { flex: 1; }
+.app-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+.app-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.app-arrow {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+  <h1 class="title">reset <span class="glyph">✦</span></h1>
+  <p class="subtitle">a small collection of calm tools</p>
+  <div class="grid">
+    <a class="app-link" href="./gmail/">
+      <div class="app-icon">✉</div>
+      <div class="app-info">
+        <div class="app-name">newsletters</div>
+        <div class="app-desc">daily newsletters from gmail, as minimal cards</div>
+      </div>
+      <span class="app-arrow">→</span>
+    </a>
+  </div>
+</body>
+</html>
